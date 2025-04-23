@@ -1,0 +1,75 @@
+#Project Setup
+
+mkdir git-conflict-demo
+cd git-conflict-demo
+
+echo "print('Hello from main')" > app.py
+git init
+git add .
+git commit -m "Initial commit on main"
+
+#Connect Local Repo to GitHub and Push
+git remote add origin https://github.com/livisRepo/my-fastapi-project.git
+git branch -M main
+git push -u origin main
+
+# Merge Conflict
+# 1: Create a Branch and Make a Change
+git checkout -b feature-branch
+echo "print('Feature branch change')" > app.py
+git add app.py
+git commit -m "Update app.py in feature branch"
+
+# 2: Switch to Main and Change the Same Line
+git checkout main
+echo "print('Main branch change')" > app.py
+git add app.py
+git commit -m "Update app.py in main"
+
+# 3: Merge and Resolve Conflict
+git merge feature-branch
+
+# 4: Fix Conflict
+print('Main branch change')
+print('Feature branch change')
+
+git add app.py
+git commit -m "Resolved merge conflict"
+
+# Rebase Conflict
+# 1: New Branch
+git checkout -b rebase-branch
+echo "print('Change from rebase branch')" > app.py
+git add app.py
+git commit -m "Change app.py in rebase branch"
+
+# 2: Go to Main and Change Same Line
+git checkout main
+echo "print('Another change from main')" > app.py
+git add app.py
+git commit -m "Main update again"
+
+# 3: Rebase and Resolve Conflict
+git checkout rebase-branch
+git rebase main
+
+# Conflict will appear. Fix app.py
+git add app.py
+git rebase --continue
+
+git checkout main
+git merge rebase-branch
+
+# Git Stash
+# 1: Simulate Work in Progress
+echo "print('WIP code that’s not ready')" > wip.py
+git add wip.py
+
+# 2: Stash Changes
+git checkout feature-branch
+git stash
+git checkout main
+
+# 3: Come Back Later
+git checkout feature-branch
+git stash apply
